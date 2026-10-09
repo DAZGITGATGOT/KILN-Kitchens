@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiln Quote Calculator — Webflow reference build</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link rel="stylesheet" href="../_ds/modernist-91a11da9-d86f-45a9-be66-183e8dec247f/styles.css">
+<!--
+  Reference build. Every class below is a class to create in the Webflow Designer;
+  every data-kq-* attribute is a custom attribute to add (Element settings → Custom attributes).
+  The <style> block is here only so this file previews on its own — in Webflow, style the classes in the Designer.
+-->
+<style>
+  body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);}
+  a{color:var(--color-text);} a:hover{color:var(--color-accent-700);}
+  button{font:inherit;color:inherit;}
+  :focus-visible{outline:2px solid var(--color-accent);outline-offset:2px;}
+  .kq-page{padding:clamp(16px,4vw,48px);}
+  .kq-container{max-width:1240px;margin:0 auto;display:grid;gap:32px;}
+  .kq-kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-700);}
+  .kq-h1{margin:0;font-weight:800;font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.02em;}
+  .kq-lede{margin:0;font-size:18px;line-height:1.5;max-width:760px;}
+  .kq-demo-banner{border:2px solid var(--color-accent);padding:10px 14px;font-size:14px;font-weight:600;color:var(--color-accent-800);}
+  .kq-layout{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start;}
+  .kq-steps{flex:2 1 560px;min-width:0;}
+  .kq-step{border-top:2px solid var(--color-text);padding:24px 0 40px;display:grid;gap:20px;}
+  .kq-step-head{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;}
+  .kq-step-num{font-size:15px;font-weight:800;color:var(--color-accent-700);padding-top:6px;}
+  .kq-h2{margin:0;font-weight:800;font-size:28px;}
+  .kq-help{margin:0;font-size:15px;line-height:1.5;color:var(--color-neutral-700);}
+  .kq-label{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+  .kq-group{display:grid;gap:10px;}
+  .kq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+  .kq-tile{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding:16px;background:transparent;border:2px solid var(--color-divider);border-radius:0;cursor:pointer;}
+  .kq-tile:hover{border-color:var(--color-text);}
+  .kq-tile.is-selected{background:var(--color-text);color:var(--color-bg);border-color:var(--color-text);}
+  .kq-tile-title{font-size:18px;font-weight:800;line-height:1.2;}
+  .kq-tile-meta{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-neutral-700);}
+  .kq-tile-text{font-size:14px;line-height:1.45;color:var(--color-neutral-700);}
+  .kq-tile.is-selected .kq-tile-meta,.kq-tile.is-selected .kq-tile-text{color:var(--color-neutral-300);}
+  .kq-shape-icon{width:60px;height:40px;}
+  .kq-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .kq-chip{padding:8px 14px;min-height:40px;background:transparent;border:2px solid var(--color-divider);border-radius:0;cursor:pointer;font-size:14px;font-weight:700;}
+  .kq-chip:hover{border-color:var(--color-text);}
+  .kq-chip.is-selected{background:var(--color-text);color:var(--color-bg);border-color:var(--color-text);}
+  .kq-seg{display:flex;border:2px solid var(--color-text);width:max-content;max-width:100%;}
+  .kq-seg-btn{padding:8px 14px;min-width:84px;text-align:left;background:transparent;border:0;border-radius:0;cursor:pointer;font-size:14px;font-weight:700;}
+  .kq-seg-btn.is-selected{background:var(--color-text);color:var(--color-bg);}
+  .kq-counter{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;}
+  .kq-diagram{flex:0 0 200px;display:grid;gap:8px;}
+  .kq-legend{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--color-neutral-700);}
+  .kq-legend-swatch{width:14px;height:14px;background:var(--color-neutral-300);}
+  .kq-runs{flex:1 1 260px;display:grid;gap:12px;min-width:0;}
+  .kq-run{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .kq-run-label{font-size:17px;font-weight:700;}
+  .kq-stepper{display:flex;border:2px solid var(--color-text);}
+  .kq-stepper-btn{width:44px;height:44px;background:transparent;border:0;cursor:pointer;font-size:22px;font-weight:700;}
+  .kq-stepper-btn:hover{background:var(--color-surface);}
+  .kq-stepper-value{min-width:88px;display:flex;align-items:center;padding:0 14px;font-size:20px;font-weight:800;border-left:2px solid var(--color-text);border-right:2px solid var(--color-text);}
+  .kq-total{border-top:2px solid var(--color-text);padding-top:10px;font-size:15px;font-weight:700;}
+  .kq-apps{display:grid;border-top:1px solid var(--color-divider);}
+  .kq-app-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--color-divider);min-height:44px;}
+  .kq-app-toggle{display:flex;align-items:center;gap:12px;background:none;border:0;padding:4px 0;cursor:pointer;font-size:17px;font-weight:600;}
+  .kq-check{width:22px;height:22px;border:2px solid var(--color-text);display:flex;align-items:center;justify-content:center;color:var(--color-bg);}
+  .kq-app-toggle.is-selected .kq-check{background:var(--color-text);}
+  .kq-app-toggle.is-selected .kq-check::after{content:"";width:6px;height:11px;border:solid var(--color-bg);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px);}
+  .kq-panel-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;padding:16px;background:var(--color-surface);}
+  .kq-summary{flex:1 1 340px;min-width:0;position:sticky;top:24px;background:var(--color-surface);border-top:2px solid var(--color-accent);}
+  .kq-summary-block{padding:16px 24px;border-top:2px solid var(--color-text);display:grid;gap:8px;}
+  .kq-summary-block:first-child{border-top:0;padding-top:24px;}
+  .kq-range{font-weight:800;font-size:clamp(30px,3.4vw,42px);line-height:1.05;letter-spacing:-.02em;}
+  .kq-small{font-size:13px;line-height:1.45;color:var(--color-neutral-700);}
+  .kq-line{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--color-divider);}
+  .kq-line-title{font-size:15px;font-weight:700;}
+  .kq-line-value{font-size:15px;font-weight:700;white-space:nowrap;}
+  .kq-package{display:flex;justify-content:space-between;gap:12px;padding:6px 10px;font-size:14px;}
+  .kq-package.is-selected{background:var(--color-text);color:var(--color-bg);font-weight:800;}
+  .kq-stage{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;font-size:14px;padding:3px 0;}
+  .kq-stage-num{font-weight:800;color:var(--color-accent-700);}
+  .kq-stage-name{font-weight:600;}
+  .kq-stage-note{display:block;font-size:12px;color:var(--color-neutral-700);}
+  .kq-offer{background:var(--color-accent);color:var(--color-bg);}
+  three-d-stage:not(:defined){visibility:hidden;}
+  .kq-3d{display:block;width:100%;height:300px;}
+  .kq-3d-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+  .kq-3d-warning{font-size:13px;line-height:1.45;font-weight:600;color:var(--color-accent-700);}
+  .kq-cta{display:flex;justify-content:space-between;align-items:center;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="kq-page">
+<div class="kq-container" data-kq-root data-demo="true" data-founding-offer="false" data-cta-url="/book-a-survey">
+
+  <header style="display:grid;gap:12px;">
+    <div class="kq-kicker">Kiln Kitchens — Quote calculator</div>
+    <h1 class="kq-h1">Price your outdoor kitchen</h1>
+    <p class="kq-lede">Build your kitchen step by step and see an indicative range as you go. Your fixed price is agreed at design stage — one contact, every trade coordinated.</p>
+    <div class="kq-demo-banner" data-kq-if="demo">SAMPLE — figures are placeholders. Remove data-demo before publishing.</div>
+  </header>
+
+  <div class="kq-layout">
+    <div class="kq-steps">
+
+      <!-- 01 SHAPE -->
+      <section class="kq-step">
+        <div class="kq-step-head"><div class="kq-step-num">01</div><div><h2 class="kq-h2">Shape</h2><p class="kq-help">Pick the layout that best matches the space you have in mind.</p></div></div>
+        <div class="kq-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));">
+          <button class="kq-tile" data-kq-choice="shape" data-value="row"><svg class="kq-shape-icon" viewBox="0 0 60 40" fill="none" stroke="currentColor" stroke-width="6"><path d="M4 30h52"/></svg><span class="kq-tile-title">Row</span></button>
+          <button class="kq-tile is-selected" data-kq-choice="shape" data-value="L"><svg class="kq-shape-icon" viewBox="0 0 60 40" fill="none" stroke="currentColor" stroke-width="6"><path d="M4 6v24h52"/></svg><span class="kq-tile-title">L-shape</span></button>
+          <button class="kq-tile" data-kq-choice="shape" data-value="U"><svg class="kq-shape-icon" viewBox="0 0 60 40" fill="none" stroke="currentColor" stroke-width="6"><path d="M4 6v24h52V6"/></svg><span class="kq-tile-title">U-shape</span></button>
+        </div>
+      </section>
+
+      <!-- 02 COUNTER SPACE -->
+      <section class="kq-step">
+        <div class="kq-step-head"><div class="kq-step-num">02</div><div><h2 class="kq-h2">Counter space</h2><p class="kq-help">Measure the length of each straight run of counter, leaving out the corners. A rough figure is fine — we measure properly at survey.</p></div></div>
+        <div class="kq-counter">
+          <div class="kq-diagram">
+            <!-- One diagram per shape; export these as SVG/PNG images in Webflow. -->
+            <svg data-kq-if="shape:row" width="200" height="140" viewBox="0 0 200 140"><rect x="20" y="58" width="160" height="24" fill="var(--color-text)"/><text x="100" y="70" text-anchor="middle" dominant-baseline="central" fill="var(--color-bg)" font-size="13" font-weight="800">A</text></svg>
+            <svg data-kq-if="shape:L" width="200" height="140" viewBox="0 0 200 140"><rect x="20" y="100" width="24" height="24" fill="var(--color-neutral-300)"/><rect x="20" y="16" width="24" height="84" fill="var(--color-text)"/><rect x="44" y="100" width="136" height="24" fill="var(--color-text)"/><text x="32" y="58" text-anchor="middle" dominant-baseline="central" fill="var(--color-bg)" font-size="13" font-weight="800">A</text><text x="112" y="112" text-anchor="middle" dominant-baseline="central" fill="var(--color-bg)" font-size="13" font-weight="800">B</text></svg>
+            <svg data-kq-if="shape:U" width="200" height="140" viewBox="0 0 200 140"><rect x="20" y="100" width="24" height="24" fill="var(--color-neutral-300)"/><rect x="156" y="100" width="24" height="24" fill="var(--color-neutral-300)"/><rect x="20" y="16" width="24" height="84" fill="var(--color-text)"/><rect x="44" y="100" width="112" height="24" fill="var(--color-text)"/><rect x="156" y="16" width="24" height="84" fill="var(--color-text)"/><text x="32" y="58" text-anchor="middle" dominant-baseline="central" fill="var(--color-bg)" font-size="13" font-weight="800">A</text><text x="100" y="112" text-anchor="middle" dominant-baseline="central" fill="var(--color-bg)" font-size="13" font-weight="800">B</text><text x="168" y="58" text-anchor="middle" dominant-baseline="central" fill="var(--color-bg)" font-size="13" font-weight="800">C</text></svg>
+            <div class="kq-legend" data-kq-if="corners"><span class="kq-legend-swatch"></span><span>Corner — don't include</span></div>
+          </div>
+          <div class="kq-runs">
+            <div class="kq-run" data-kq-run="0"><span class="kq-run-label">Run A</span><div class="kq-stepper"><button class="kq-stepper-btn" data-kq-run-dec aria-label="Shorter">−</button><span class="kq-stepper-value" data-kq-run-value>3.0m</span><button class="kq-stepper-btn" data-kq-run-inc aria-label="Longer">+</button></div></div>
+            <div class="kq-run" data-kq-run="1"><span class="kq-run-label">Run B</span><div class="kq-stepper"><button class="kq-stepper-btn" data-kq-run-dec aria-label="Shorter">−</button><span class="kq-stepper-value" data-kq-run-value>2.0m</span><button class="kq-stepper-btn" data-kq-run-inc aria-label="Longer">+</button></div></div>
+            <div class="kq-run" data-kq-run="2"><span class="kq-run-label">Run C</span><div class="kq-stepper"><button class="kq-stepper-btn" data-kq-run-dec aria-label="Shorter">−</button><span class="kq-stepper-value" data-kq-run-value>2.5m</span><button class="kq-stepper-btn" data-kq-run-inc aria-label="Longer">+</button></div></div>
+            <div class="kq-total" data-kq-out="counter-total">5.0m of counter + 1 corner unit</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 WHERE WILL IT SIT -->
+      <section class="kq-step">
+        <div class="kq-step-head"><div class="kq-step-num">03</div><div><h2 class="kq-h2">Where will it sit?</h2><p class="kq-help">Tell us about the space — we take care of the groundwork, trades and sign-off.</p></div></div>
+        <div class="kq-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+          <button class="kq-tile" data-kq-choice="build" data-value="simple"><span class="kq-tile-title">On my existing patio</span><span class="kq-tile-meta">Freestanding</span><span class="kq-tile-text">Units stand on a sound, level surface you already have. Quickest to install — and they can move with you.</span></button>
+          <button class="kq-tile is-selected" data-kq-choice="build" data-value="moderate"><span class="kq-tile-title">Built into a new patio</span><span class="kq-tile-meta">New porcelain patio</span><span class="kq-tile-text">We lay a new porcelain patio and fix the units through it for a permanent, built-in look.</span></button>
+          <button class="kq-tile" data-kq-choice="build" data-value="top"><span class="kq-tile-title">Fully built-in</span><span class="kq-tile-meta">New concrete base</span><span class="kq-tile-text">Our most permanent option — a poured base under the kitchen, with a choice of look.</span></button>
+        </div>
+        <div class="kq-small" data-kq-if="partner">We work with approved landscaping partners for the patio and base. That element is quoted and charged separately by them, so it isn't included in the range shown.</div>
+        <div class="kq-group" data-kq-if="build:top">
+          <div class="kq-label">Choose the look</div>
+          <div class="kq-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+            <button class="kq-tile is-selected" data-kq-choice="look" data-value="standard"><span class="kq-tile-title">Modular units</span><span class="kq-tile-text">Clean, contemporary cabinets fixed to the base.</span></button>
+            <button class="kq-tile" data-kq-choice="look" data-value="masonry"><span class="kq-tile-title">Brick or block built</span><span class="kq-tile-text">Cabinets built from brick or blockwork, rendered or clad. Fully bespoke.</span><span class="kq-tile-meta">Scoped individually</span></button>
+            <button class="kq-tile" data-kq-choice="look" data-value="clad"><span class="kq-tile-title">Modular with stone or brick cladding</span><span class="kq-tile-text">The built-in masonry look over modular units — for less than full masonry.</span><span class="kq-tile-meta">Price on enquiry</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 APPLIANCES -->
+      <section class="kq-step">
+        <div class="kq-step-head"><div class="kq-step-num">04</div><div><h2 class="kq-h2">Appliances</h2><p class="kq-help">Priced as part of your installed package. Gas options include supply, Gas Safe connection and a pressure test.</p></div></div>
+        <div class="kq-apps">
+          <div class="kq-app-row"><button class="kq-app-toggle is-selected" data-kq-app="pizza"><span class="kq-check"></span>Pizza oven</button><div class="kq-seg" data-kq-variants="pizza"><button class="kq-seg-btn is-selected" data-kq-variant="pizza" data-value="wood">Wood</button><button class="kq-seg-btn" data-kq-variant="pizza" data-value="gas">Gas</button></div></div>
+          <div class="kq-app-row"><button class="kq-app-toggle is-selected" data-kq-app="bbq"><span class="kq-check"></span>BBQ</button><div class="kq-seg" data-kq-variants="bbq"><button class="kq-seg-btn" data-kq-variant="bbq" data-value="charcoal">Charcoal</button><button class="kq-seg-btn is-selected" data-kq-variant="bbq" data-value="gas">Gas</button></div></div>
+          <div class="kq-app-row"><button class="kq-app-toggle" data-kq-app="kamado"><span class="kq-check"></span>Kamado</button></div>
+          <div class="kq-app-row"><button class="kq-app-toggle is-selected" data-kq-app="sink"><span class="kq-check"></span>Sink</button><div class="kq-seg" data-kq-variants="sink"><button class="kq-seg-btn is-selected" data-kq-variant="sink" data-value="single">Single</button><button class="kq-seg-btn" data-kq-variant="sink" data-value="double">Double</button></div></div>
+          <div class="kq-app-row"><button class="kq-app-toggle" data-kq-app="ice"><span class="kq-check"></span>Ice well</button></div>
+          <div class="kq-app-row"><button class="kq-app-toggle is-selected" data-kq-app="fridge"><span class="kq-check"></span>Fridge</button><div class="kq-seg" data-kq-variants="fridge"><button class="kq-seg-btn is-selected" data-kq-variant="fridge" data-value="single">Single</button><button class="kq-seg-btn" data-kq-variant="fridge" data-value="double">Double</button></div></div>
+          <div class="kq-app-row"><button class="kq-app-toggle" data-kq-app="wine"><span class="kq-check"></span>Wine cooler</button><div class="kq-seg" data-kq-variants="wine"><button class="kq-seg-btn" data-kq-variant="wine" data-value="single">Single</button><button class="kq-seg-btn" data-kq-variant="wine" data-value="double">Double</button></div></div>
+          <div class="kq-app-row"><button class="kq-app-toggle" data-kq-app="storage"><span class="kq-check"></span>Storage</button></div>
+        </div>
+      </section>
+
+      <!-- 05 WORKTOP & FINISH -->
+      <section class="kq-step">
+        <div class="kq-step-head"><div class="kq-step-num">05</div><div><h2 class="kq-h2">Worktop &amp; finish</h2><p class="kq-help">Samples are brought to your design visit.</p></div></div>
+        <div class="kq-group"><div class="kq-label">Worktop</div>
+          <div class="kq-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+            <button class="kq-tile is-selected" data-kq-choice="worktop" data-value="dekton"><span class="kq-tile-title">Dekton</span></button>
+            <button class="kq-tile" data-kq-choice="worktop" data-value="lapitec"><span class="kq-tile-title">Lapitec</span></button>
+            <button class="kq-tile" data-kq-choice="worktop" data-value="telford"><span class="kq-tile-title">Telford Tops</span></button>
+          </div>
+        </div>
+        <div class="kq-group"><div class="kq-label">Unit finish</div>
+          <div class="kq-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+            <button class="kq-tile is-selected" data-kq-choice="finish" data-value="artigiano"><span class="kq-tile-title">Artigiano</span><span class="kq-tile-text">Finishes to be confirmed</span></button>
+            <button class="kq-tile" data-kq-choice="finish" data-value="naturateq"><span class="kq-tile-title">NaturaTeq</span><span class="kq-tile-text">Finishes to be confirmed</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 ADD-ONS -->
+      <section class="kq-step">
+        <div class="kq-step-head"><div class="kq-step-num">06</div><div><h2 class="kq-h2">Add-ons</h2><p class="kq-help">All optional. Every visit includes a Luminos lighting proposal — no obligation.</p></div></div>
+        <div class="kq-group"><div class="kq-label">Luminos lighting zones</div>
+          <div class="kq-chips">
+            <button class="kq-chip" data-kq-toggle="zones" data-value="path">Path &amp; step</button>
+            <button class="kq-chip" data-kq-toggle="zones" data-value="task">Under-counter task</button>
+            <button class="kq-chip" data-kq-toggle="zones" data-value="feature">Feature &amp; planting</button>
+          </div>
+          <div class="kq-small">IP65+ fittings. Cable routes are planned before your patio surface is finished.</div>
+        </div>
+        <div class="kq-group"><div class="kq-label">Pergola</div>
+          <div class="kq-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));">
+            <button class="kq-tile is-selected" data-kq-choice="pergola" data-value="none"><span class="kq-tile-title">No cover</span></button>
+            <button class="kq-tile" data-kq-choice="pergola" data-value="timber"><span class="kq-tile-title">Freestanding timber</span></button>
+            <button class="kq-tile" data-kq-choice="pergola" data-value="louvred"><span class="kq-tile-title">Aluminium louvred</span></button>
+            <button class="kq-tile" data-kq-choice="pergola" data-value="sail"><span class="kq-tile-title">Sail shade</span></button>
+            <button class="kq-tile" data-kq-choice="pergola" data-value="bio"><span class="kq-tile-title">Bioclimatic</span></button>
+          </div>
+          <div class="kq-panel-box" data-kq-if="pergola:!none">
+            <div class="kq-group"><div class="kq-label">Size</div>
+              <div class="kq-seg">
+                <button class="kq-seg-btn" data-kq-choice="size" data-value="2x3">2m × 3m</button>
+                <button class="kq-seg-btn is-selected" data-kq-choice="size" data-value="3x4">3m × 4m</button>
+                <button class="kq-seg-btn" data-kq-choice="size" data-value="4x4">4m × 4m</button>
+              </div>
+              <div class="kq-small">Larger sizes available on request. We'll size and quote it at your design visit.</div>
+            </div>
+            <div class="kq-group" data-kq-if="showSlats"><div class="kq-label">Slats</div>
+              <div class="kq-seg">
+                <button class="kq-seg-btn is-selected" data-kq-choice="slats" data-value="manual">Manual</button>
+                <button class="kq-seg-btn" data-kq-choice="slats" data-value="electric">Electric</button>
+              </div>
+            </div>
+            <div class="kq-group" style="grid-column:1/-1;"><div class="kq-label">Extras</div>
+              <div class="kq-chips">
+                <button class="kq-chip" data-kq-toggle="extras" data-value="walls">Side walls</button>
+                <button class="kq-chip" data-kq-toggle="extras" data-value="heaters">Infrared heaters</button>
+                <button class="kq-chip" data-kq-toggle="extras" data-value="led">LED strips</button>
+              </div>
+              <div class="kq-small">Most pergolas under 2.5m at the eaves fall within permitted development — we confirm this for your site.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- SUMMARY -->
+    <aside class="kq-summary">
+      <div class="kq-summary-block" data-kq-3d-scope>
+        <div class="kq-3d-head"><div class="kq-label">Your kitchen</div><a class="kq-small" href="kitchen-3d.html" data-kq-3d-link="kitchen-3d.html" target="_blank">Open full view →</a></div>
+        <three-d-stage class="kq-3d" data-kq-3d="live" name="kiln-kitchen" background="var(--color-surface)" hide-toolbar></three-d-stage>
+        <div class="kq-3d-warning" data-kq-3d-warning hidden></div>
+        <div class="kq-small" data-kq-3d-caption></div>
+      </div>
+      <div class="kq-summary-block">
+        <div class="kq-label">Indicative range</div>
+        <div class="kq-range" data-kq-out="range">—</div>
+        <div class="kq-small" data-kq-out="range-note"></div>
+      </div>
+      <div class="kq-summary-block">
+        <div class="kq-line"><div><div class="kq-line-title">Kitchen</div><div class="kq-small" data-kq-out="kitchen-detail"></div></div><div class="kq-line-value" data-kq-out="kitchen-value"></div></div>
+        <div class="kq-line"><div><div class="kq-line-title">Luminos lighting</div><div class="kq-small" data-kq-out="lighting-detail"></div></div><div class="kq-line-value" data-kq-out="lighting-value"></div></div>
+        <div class="kq-line"><div><div class="kq-line-title">Pergola</div><div class="kq-small" data-kq-out="pergola-detail"></div></div><div class="kq-line-value" data-kq-out="pergola-value"></div></div>
+        <div class="kq-small" data-kq-out="ground-note"></div>
+      </div>
+      <div class="kq-summary-block">
+        <div class="kq-label">Package</div>
+        <div class="kq-package" data-kq-package="kitchen"><span>Kitchen only</span><span data-kq-out="from-kitchen"></span></div>
+        <div class="kq-package" data-kq-package="cover"><span>Kitchen + cover</span><span data-kq-out="from-cover"></span></div>
+        <div class="kq-package" data-kq-package="lighting"><span>Kitchen + cover + lighting</span><span data-kq-out="from-lighting"></span></div>
+      </div>
+      <div class="kq-summary-block">
+        <div style="display:flex;justify-content:space-between;gap:12px;"><div class="kq-label">Estimated timeline</div><strong data-kq-out="total-weeks"></strong></div>
+        <div class="kq-stage" data-kq-stage="survey"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Survey &amp; design</span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="groundwork"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Groundwork<span class="kq-stage-note">Compacted MOT Type 1 sub-base</span></span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="utilities"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Utilities laying<span class="kq-stage-note" data-kq-out="stage-utilities-note"></span></span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="patio"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name" data-kq-out="stage-patio-name">Patio installation</span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="cure"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Concrete cure<span class="kq-stage-note">Hold point: base inspected against design spec</span></span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="kitchen"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Kitchen installation</span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="connection"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Utilities connection<span class="kq-stage-note" data-kq-out="stage-connection-note"></span></span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-stage" data-kq-stage="handover"><span class="kq-stage-num" data-kq-stage-num></span><span class="kq-stage-name">Handover<span class="kq-stage-note">Standard manufacturer warranties</span></span><span class="kq-small" data-kq-stage-dur></span></div>
+        <div class="kq-small">Weather, cure time, trade sequencing, supplier lead times and ground conditions can all move dates. Specific dates live in your contract.</div>
+      </div>
+      <div class="kq-summary-block kq-offer" data-kq-if="offer">
+        <div class="kq-label">Founding client offer</div>
+        <strong data-kq-out="offer-text"></strong>
+        <div style="font-size:12px;">Limited to our first ten projects.</div>
+      </div>
+      <div class="kq-summary-block">
+        <a class="btn btn-primary btn-block kq-cta" href="/book-a-survey" data-kq-cta><span>Schedule your design visit</span><span>→</span></a>
+        <div class="kq-small">Book a survey and design visit. We'll turn this range into a fixed price.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+<script src="kiln-calculator.js"></script>
+<script src="three-d-stage.js"></script>
+<script type="module" src="kiln-3d.js"></script>
+</body>
+</html>

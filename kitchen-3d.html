@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your kitchen, sketched — Kiln Kitchens</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<link rel="stylesheet" href="../_ds/modernist-91a11da9-d86f-45a9-be66-183e8dec247f/styles.css">
+<style>
+  body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);}
+  a{color:var(--color-text);} a:hover{color:var(--color-accent-700);}
+  :focus-visible{outline:2px solid var(--color-accent);outline-offset:2px;}
+  three-d-stage:not(:defined){visibility:hidden;}
+  .kq-page{padding:clamp(16px,4vw,48px);}
+  .kq-container{max-width:1400px;margin:0 auto;display:grid;gap:32px;}
+  .kq-kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-700);}
+  .kq-h1{margin:0;font-weight:800;font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.02em;}
+  .kq-lede{margin:0;font-size:18px;line-height:1.5;max-width:760px;}
+  .kq-layout{display:flex;flex-wrap:wrap;gap:0;border-top:2px solid var(--color-text);}
+  .kq-view{flex:2 1 560px;min-width:0;border-right:2px solid var(--color-text);}
+  .kq-3d{display:block;width:100%;height:min(72vh,720px);}
+  .kq-side{flex:1 1 320px;min-width:0;display:grid;align-content:start;background:var(--color-surface);}
+  .kq-block{padding:20px 24px;border-top:2px solid var(--color-text);display:grid;gap:10px;}
+  .kq-block:first-child{border-top:0;}
+  .kq-label{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+  .kq-range{font-weight:800;font-size:clamp(30px,3.4vw,42px);line-height:1.05;letter-spacing:-.02em;}
+  .kq-small{font-size:13px;line-height:1.45;color:var(--color-neutral-700);}
+  .kq-line{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--color-divider);}
+  .kq-line-title{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding-top:2px;}
+  .kq-spec-value{font-size:15px;line-height:1.4;font-weight:600;text-wrap:pretty;}
+  .kq-3d-warning{font-size:14px;line-height:1.45;font-weight:600;color:var(--color-accent-700);}
+  .kq-cta{display:flex;justify-content:space-between;align-items:center;text-decoration:none;}
+  .kq-hint{display:flex;flex-wrap:wrap;gap:16px;padding:12px 16px;border-top:2px solid var(--color-text);font-size:13px;color:var(--color-neutral-700);}
+</style>
+</head>
+<body>
+<div class="kq-page">
+<div class="kq-container" data-kq-3d-scope>
+  <header style="display:grid;gap:12px;">
+    <div class="kq-kicker">Kiln Kitchens — Your kitchen</div>
+    <h1 class="kq-h1">Your kitchen, sketched</h1>
+    <p class="kq-lede">A simple 3D sketch built from your estimate. Turn it around, then bring it to your free design visit, where we measure and design it properly.</p>
+  </header>
+  <div class="kq-layout">
+    <div class="kq-view">
+      <three-d-stage class="kq-3d" data-kq-3d="url" name="kiln-kitchen" background="var(--color-bg)"></three-d-stage>
+      <div class="kq-hint"><span>Drag to turn</span><span>Scroll to zoom</span><span>Right-drag to move</span></div>
+    </div>
+    <aside class="kq-side">
+      <div class="kq-block">
+        <div class="kq-label">Your estimate</div>
+        <div class="kq-range" data-kq-3d-range>—</div>
+        <div class="kq-small">Your estimate. We confirm a fixed price after your free design visit.</div>
+      </div>
+      <div class="kq-block">
+        <div class="kq-label">Your choices</div>
+        <div data-kq-3d-spec></div>
+        <div class="kq-3d-warning" data-kq-3d-warning hidden></div>
+        <div class="kq-small" data-kq-3d-caption></div>
+      </div>
+      <div class="kq-block">
+        <a class="btn btn-primary btn-block kq-cta" href="/book-a-survey" data-kq-book><span>Book Free Design Visit</span><span>→</span></a>
+        <a class="kq-small" href="reference-build.html">← Change your choices</a>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+<script>document.querySelectorAll('[data-kq-book]').forEach(function (a) { a.href = a.getAttribute('href') + location.search; });</script>
+<script src="three-d-stage.js"></script>
+<script type="module" src="kiln-3d.js"></script>
+</body>
+</html>
